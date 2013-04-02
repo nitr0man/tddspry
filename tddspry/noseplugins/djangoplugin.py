@@ -40,7 +40,6 @@ class DjangoPlugin(Plugin):
     def begin(self):
         from django.conf import settings
         from django.core.handlers.wsgi import WSGIHandler
-        from django.core.servers.basehttp import AdminMediaHandler
         from django.test.simple import TEST_MODULE
 
         from tddspry.django.settings import IP, PORT
@@ -62,7 +61,15 @@ class DjangoPlugin(Plugin):
         self.setup_django()
 
         # Setup Twill for testing with Django
-        app = AdminMediaHandler(WSGIHandler())
+        try:
+            from django.contrib.staticfiles.handlers import StaticFilesHandler
+            if 'django.contrib.staticfiles' in settings.INSTALLED_APPS:
+                app = StaticFilesHandler(WSGIHandler())
+            else:
+                app = WSGIHandler()
+        except ImportError:  # django < 1.5
+            from django.core.servers.basehttp import AdminMediaHandler
+            app = AdminMediaHandler(WSGIHandler())
         add_wsgi_intercept(IP, PORT, lambda: app)
 
     def configure(self, options, config):
