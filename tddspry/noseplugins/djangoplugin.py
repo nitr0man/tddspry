@@ -26,9 +26,16 @@ class DjangoPlugin(Plugin):
     directories.
     """
     error_dir = None
+    interactive = True
     name = 'django'
     settings = None
     verbosity = 1
+
+    def __init__(self, runner=None):
+        super(DjangoPlugin, self).__init__()
+
+        if runner:
+            self.interactive = runner.interactive
 
     def begin(self):
         from django.conf import settings
@@ -211,13 +218,15 @@ class DjangoPlugin(Plugin):
 
             # Create Django test database
             self.old_database_name = settings.DATABASE_NAME
-            connection.creation.create_test_db(self.verbosity, autoclobber=True)
+            connection.creation.create_test_db(self.verbosity,
+                                               autoclobber=True)
         # If Django >= 1.2
         else:
             from django.test.simple import DjangoTestSuiteRunner
 
             # Initialize Django tests runner
-            runner = DjangoTestSuiteRunner(verbosity=self.verbosity)
+            runner = DjangoTestSuiteRunner(interactive=self.interactive,
+                                           verbosity=self.verbosity)
 
             # New Django tests runner set ``DEBUG`` to False on setup test
             # environment, so we need to store real ``DEBUG`` value

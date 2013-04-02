@@ -64,15 +64,15 @@ Check that ``username`` field of standart ``auth.User`` model is unique::
 
         def test_unique(self):
             self.assert_create(User,
-                            username=TEST_USERNAME,
-                            password=TEST_PASSWORD,
-                            email=TEST_EMAIL)
+                               username=TEST_USERNAME,
+                               password=TEST_PASSWORD,
+                               email=TEST_EMAIL)
             self.assert_raises(Exception,
-                            self.assert_create,
-                            User,
-                            username=TEST_USERNAME,
-                            password=TEST_PASSWORD,
-                            email=TEST_EMAIL)
+                               self.assert_create,
+                               User,
+                               username=TEST_USERNAME,
+                               password=TEST_PASSWORD,
+                               email=TEST_EMAIL)
 
 Http (twill) test
 ~~~~~~~~~~~~~~~~~
@@ -154,6 +154,8 @@ Requirements
 * `twill <http://twill.idyll.org/>`_ 0.9
 * `django-nose <http://github.com/jbalogh/django-nose>`_ (*optional*, required
   by test runner)
+* `datadiff <http://pypi.python.org/pypi/datadiff>`_ (*optional*, required by
+  ``TDDSPRY_USE_DATADIFF`` setting)
 
 Installation
 ============
