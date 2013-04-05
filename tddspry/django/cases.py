@@ -643,7 +643,7 @@ class TestCase(DjangoTestCase, NoseTestCase):
         Also login to Django test client.
         """
         self.go200('/admin/')
-        i = 0
+        i = 1
         while True:
             try:
                 self.formvalue(i, 'username', username)
