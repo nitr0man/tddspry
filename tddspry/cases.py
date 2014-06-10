@@ -15,8 +15,11 @@ except ImportError:
 
 # Dirty hack to prevent ``ImportError`` on installing tddspry via pip
 try:
-    from nose import tools
-except ImportError:
+    try:
+        from nose.tools import trivial as tools
+    except ImportError:
+        from nose import tools
+except:
     tools = type('FakeNoseToolsModule', (object, ), {'__all__': []})
 
 from tddspry.utils import *

@@ -27,7 +27,7 @@ from tddspry.django.settings import SITE, DjangoTestCase
 
 from twill import commands
 from twill.commands import _parseFindFlags
-from twill.errors import TwillAssertionError
+from twill.errors import TwillAssertionError, TwillException
 from twill.extensions.check_links import check_links
 from twill.namespaces import get_twill_glocals
 from twill.utils import ResultWrapper
@@ -643,9 +643,18 @@ class TestCase(DjangoTestCase, NoseTestCase):
         Also login to Django test client.
         """
         self.go200('/admin/')
-
-        self.formvalue(1, 'username', username)
-        self.formvalue(1, 'password', password)
+        i = 1
+        while True:
+            try:
+                self.formvalue(i, 'username', username)
+                self.formvalue(i, 'password', password)
+                break
+            except (TwillException, TwillAssertionError):
+                if i > 3:
+                    raise
+                i += 1
+            except:
+                raise
 
         self.submit200()
         self.notfind('<input type="hidden" name="this_is_the_login_form" ' \
