@@ -19,7 +19,7 @@ readme = open(os.path.join(os.path.dirname(__file__), 'README.rst'))
 README = readme.read()
 readme.close()
 
-requires = ['Django (>= 1.0)', 'nose (>= 0.11.0)', 'twill (== 0.9)']
+requires = ['Django (>= 1.0)', 'nose (>= 0.11.0)', 'twill (== 0.9.1)']
 version = __import__('tddspry').get_version()
 
 if kwargs:
